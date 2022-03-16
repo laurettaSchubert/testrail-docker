@@ -18,6 +18,9 @@ services:
     volumes:
       - 'testrail_config:/var/www/testrail/config/'
       - 'testrail_opt:/opt/testrail'
+      - 'testrail_entrypoint_scripts:/entrypoint-scripts'
+    entrypoint: "/entrypoint-scripts/apache-entrypoint.sh"
+    command: ["apache2-foreground"]
 
   db:
     image: testrail/mysql:latest
@@ -47,6 +50,13 @@ networks:
     driver: bridge
 
 volumes:
+  testrail_entrypoint_scripts:
+    driver: local
+    driver_opts:
+      type: none
+      device: "$PWD/entrypoint-scripts"
+      o: bind
+
   testrail_opt:
     driver: local
     driver_opts:
