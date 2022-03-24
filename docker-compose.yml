@@ -11,6 +11,8 @@ services:
   srv:
     image: "testrail/apache:${TESTRAIL_VERSION:-latest}"
     restart: unless-stopped
+    logging: 
+       driver: journald 
     networks:
       - testrail
     ports:
@@ -25,6 +27,8 @@ services:
   db:
     image: testrail/mysql:latest
     restart: unless-stopped
+    logging:
+       driver: journald
     depends_on:
       - srv
     networks:
@@ -42,10 +46,15 @@ services:
 
   cassandra:
     image: testrail/cassandra:latest
+    restart: unless-stopped
+    logging:
+       driver: journald 
     networks:
       - testrail
     volumes:
       - 'testrail_cassandra:/var/lib/cassandra'
+      - 'testrail_entrypoint_scripts:/entrypoint-scripts'
+    entrypoint: "/entrypoint-scripts/cassandra-entrypoint.sh"
 
 networks:
   testrail:
