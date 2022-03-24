@@ -31,6 +31,8 @@ services:
       - testrail
     volumes:
       - 'testrail_mysql:/var/lib/mysql'
+      - 'testrail_entrypoint_scripts:/entrypoint-scripts'
+    entrypoint: "/entrypoint-scripts/mysql-entrypoint.sh"
     environment:
       MYSQL_USER:     "${DB_USER:-testrail}"
       MYSQL_PASSWORD: "${DB_PWD:-testrail}"
